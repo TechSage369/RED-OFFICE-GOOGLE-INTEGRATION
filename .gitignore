@@ -1,0 +1,8 @@
+__pycache__
+google_calendar.egg-info
+modules/__pycache__
+modules/log/__pycache__
+modules/log/log.jsonl
+secrets/*
+test/__pycache__
+
