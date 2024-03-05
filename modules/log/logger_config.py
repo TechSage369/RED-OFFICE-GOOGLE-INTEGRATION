@@ -1,17 +1,12 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import json
-import os
-import sys
-
+from pathlib import Path
 
 '''
 NOTE:
     - Didn't work `from ..config import BASE_DIR`
 '''
-# Add the parent directory of the current file to the Python path
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))  # noqa: E203,E402
-from modules.settings import BASE_DIR
 
 '''
     # Logger configuration file
@@ -32,7 +27,7 @@ from modules.settings import BASE_DIR
     ```
 '''
 
-LOG_FILE_PATH = BASE_DIR / 'modules' / 'log' / 'log.jsonl'
+LOG_FILE_PATH = Path(__file__).resolve().parent / 'log.jsonl'
 
 
 class JSONLinesFormatter(logging.Formatter):

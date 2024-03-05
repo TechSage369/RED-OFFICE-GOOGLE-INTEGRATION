@@ -33,14 +33,17 @@ def handle_exception(func):
             sys.exit(1)
         except InvalidJsonError as e:
             res = {'status': 'InvalidJsonError', 'message': e}
+            logger.error(res)
             print(res)
             sys.exit(1)
         except TypeError as e:
             res = {'status': 'TypeError', 'message': e}
+            logger.error(res)
             print(res)
             sys.exit(1)
         except (FileNotFoundError, FileExistsError) as e:
             res = {'status': 'Error With File', 'message': e}
+            logger.error(res)
             print(res)
             sys.exit(1)
         except Exception as e:
