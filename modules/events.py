@@ -129,10 +129,11 @@ class CalendarEvent:
         event = self.service.events().delete(calendarId=calendarId,
                                              eventId=eventId, **kwargs).execute()
         logger.warning(f'Event with ID {eventId} deleted Successfully.')
-        return event
+
+        return {'status': 'Deleted', 'event_id': eventId}
 
     @handle_exception
-    def list_event(self, calendarId: str, optional_parameter: dict) -> list | dict:
+    def list_event(self, calendarId: str, optional_parameter: dict) -> dict:
         '''
              # List Event
 
@@ -165,7 +166,7 @@ class CalendarEvent:
         '''
         events = self.service.events().list(
             calendarId=calendarId, **optional_parameter).execute()
-        # events = events_result.get("items", {})
+        # events = events.get("items")
         return events
 
 
