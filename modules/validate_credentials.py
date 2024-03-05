@@ -3,7 +3,7 @@ import sys
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.errors import HttpError
+from googleapiclient.errors import HttpError, InvalidJsonError
 from googleapiclient.discovery import build, Resource
 import settings
 from log.logger_config import logger
@@ -14,6 +14,40 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 TOKEN_FILE_PATH = settings.BASE_DIR / 'modules' / 'secrets' / 'token.json'
 CREDENTIALS_FILE_PATH = settings.BASE_DIR / \
     'modules' / 'secrets' / 'credentials.json'
+
+
+def handle_exception(func):
+    '''
+    Note: Decorator Function
+
+    it handles Exception for all the methods of GoogleCalendarService class
+    '''
+
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except HttpError as e:
+            res = {'status': e.resp.status, 'message': 'HttpError'}
+            logger.error(res)
+            print(res)
+            sys.exit(1)
+        except InvalidJsonError as e:
+            res = {'status': 'InvalidJsonError', 'message': e}
+            print(res)
+            sys.exit(1)
+        except TypeError as e:
+            res = {'status': 'TypeError', 'message': e}
+            print(res)
+            sys.exit(1)
+        except (FileNotFoundError, FileExistsError) as e:
+            res = {'status': 'Error With File', 'message': e}
+            print(res)
+            sys.exit(1)
+        except Exception as e:
+            logger.critical(e)
+            print({'status': 'Exception', 'message': e})
+            sys.exit(1)
+    return wrapper
 
 
 class GoogleCalendarService:
@@ -38,64 +72,39 @@ class GoogleCalendarService:
         self.CREDENTIALS_FILE_PATH = CREDENTIALS_FILE_PATH
         self.logger = logger
 
+    @handle_exception
     def get_service(self) -> Any:
-        try:
-            creds = self.load_credentials()
-            service = build("calendar", "v3", credentials=creds)
-            return service
-        except Exception as e:
-            self.handle_error('Exception', f'An exception occurred: {e}')
+        creds = self.load_credentials()
+        service = build("calendar", "v3", credentials=creds)
+        return service
 
+    @handle_exception
     def load_credentials(self):
         creds = None
-        if not os.path.exists(self.TOKEN_FILE_PATH):
-            self.handle_error(
-                'FileNotFound', f'file ({self.TOKEN_FILE_PATH}) not found')
-
-        try:
+        if os.path.exists(self.TOKEN_FILE_PATH):
             creds = Credentials.from_authorized_user_file(
                 self.TOKEN_FILE_PATH, self.SCOPES)
-        except Exception as e:
-            self.handle_error('CredentialsError',
-                              f'Error loading credentials: {e}')
 
         if not creds or not creds.valid:
             creds = self.refresh_or_acquire_new_credentials(creds)
         return creds
 
+    @handle_exception
     def refresh_or_acquire_new_credentials(self, creds):
         if creds and creds.expired and creds.refresh_token:
-            try:
-                creds.refresh(Request())
-            except HttpError as e:
-                self.handle_error(
-                    'HttpError', f'HTTP error occurred during refresh: {e}')
-            except Exception as e:
-                self.handle_error(
-                    'RefreshError', f'Error refreshing credentials: {e}')
+            creds.refresh(Request())
         else:
-            try:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    self.CREDENTIALS_FILE_PATH, self.SCOPES)
-                creds = flow.run_local_server(port=0)
-                self.save_credentials(creds)
-            except Exception as e:
-                self.handle_error('FlowError', f'Error running flow: {e}')
+            flow = InstalledAppFlow.from_client_secrets_file(
+                self.CREDENTIALS_FILE_PATH, self.SCOPES)
+            creds = flow.run_local_server(port=0)
+            self.save_credentials(creds)
 
         return creds
 
+    @handle_exception
     def save_credentials(self, creds):
-        try:
-            with open(self.TOKEN_FILE_PATH, "w") as token_file:
-                token_file.write(creds.to_json())
-        except Exception as e:
-            self.handle_error('SaveCredentialsError',
-                              f'Error saving credentials to token.json: {e}')
-
-    def handle_error(self, error_type, error_message):
-        print({'status': error_type, 'message': error_message})
-        self.logger.error({'status': error_type, 'message': error_message})
-        sys.exit(1)
+        with open(self.TOKEN_FILE_PATH, "w") as token_file:
+            token_file.write(creds.to_json())
 
 
 if __name__ == "__main__":
