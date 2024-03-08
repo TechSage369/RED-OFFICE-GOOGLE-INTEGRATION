@@ -1,1 +1,11 @@
-.venv
+# Ignore Python cache files
+**/__pycache__/
+
+# Ignore virtual environment
+.venv/
+
+# Ignore Visual Studio Code settings
+.vscode/
+
+# Ignore secrets directory
+red_office_google_integration_calendar/google_service/secrets/*
