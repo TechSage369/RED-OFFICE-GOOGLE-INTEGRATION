@@ -3,7 +3,7 @@ import tempfile
 import os
 import pathlib
 from typing import Any, Callable
-
+from red_office_google_integration_calendar.src import setting
 '''
 This module contains functions for encrypting and decrypting files, as well as a decorator function
 to create a temporary file that holds decrypted data and injects it into a function.
@@ -14,7 +14,9 @@ Functions:
     - provide_temp_decrypted_file_path
     - generate_key
     - encrypt_and_save_file
-
+NOTE:
+    when token is invalid or filenot exist we have to generate new one but when credentials dosen't exit or
+    invalid throw error. so my function right now is not well structured
 TODO:
     Write unit tests
     
@@ -33,7 +35,7 @@ def decrypt_file(path: pathlib.Path, key: bytes) -> bytes:
     """
     try:
         cipher = Fernet(key)
-        with open(str(path), 'rb') as f:
+        with open(path, 'rb') as f:
             data = f.read()
         decrypted_data = cipher.decrypt(data)
         return decrypted_data
@@ -72,8 +74,11 @@ def provide_temp_decrypted_file_path(encrypted_file_path: pathlib.Path, key: byt
             # Create a temporary file to store the decrypted data
             temp_decrypted_file = tempfile.NamedTemporaryFile(delete=False)
             temp_file_path = None
+            cipher = Fernet(key)
             try:
-                decrypted_data = decrypt_file(encrypted_file_path, key)
+                with open(encrypted_file_path, 'rb') as f:
+                    data = f.read()
+                    decrypted_data = cipher.decrypt(data)
 
                 # Write the decrypted data to the temporary file
                 temp_decrypted_file.write(decrypted_data)
@@ -82,6 +87,8 @@ def provide_temp_decrypted_file_path(encrypted_file_path: pathlib.Path, key: byt
 
                 # Inject the temporary file path to the decorated function
                 return func(pathlib.Path(temp_file_path), *args, **kwargs)
+            except (FileNotFoundError, FileExistsError):
+                return func(None, *args, **kwargs)
 
             finally:
                 # Close and delete the temporary file
@@ -111,25 +118,48 @@ def encrypt_and_save_file(file_path: pathlib.Path, data: str, key: bytes) -> Non
     :param key: The encryption/decryption key.
     """
     cipher = Fernet(key)
-    with open(str(file_path), 'wb') as f:
+    with open(file_path, 'wb') as f:
         encrypted_data = cipher.encrypt(data.encode())
         f.write(encrypted_data)
 
 
+class InitializeCredential:
+    def __init__(self, cred_data: str) -> None:
+        self.__key = generate_key()
+        self.__cred_data = cred_data
+        self.encrypted_data: bytes
+        self.__file_path = setting.SECRET_DIRECTORY_PATH / 'credentials.enc'
+        self.status = 'pending'
+
+    def initialize(self):
+        encrypt_and_save_file(self.__file_path, self.__cred_data, self.__key)
+
+        def get_raw_data(file_path: pathlib.Path) -> bytes:
+            with open(file_path, 'rb') as f:
+                return f.read()
+
+        self.encrypted_data = get_raw_data(self.__file_path)
+        self.status = 'success'
+
+    def get_key(self):
+        return self.__key
+
+
 if __name__ == '__main__':
+    # pass
     from red_office_google_integration_calendar.src import setting
 
-    f_path = setting.SECRET_DIRECTORY_PATH / 'token.enc'
-    key = b'OjC2XioSv5TqEsy5ek6___Eeodm6Ao-U1yxaSETXh3Q='
+    f_path = setting.SECRET_DIRECTORY_PATH / 'credentials.enc'
+    key = b'Lb-9cbIFCUCFcKSrWqRyEvEYuHAOB6pfMLpmHbrdnNA='
 
-    data = "What the hell"
-    encrypt_and_save_file(f_path, data, key)
+    # data = "What the helwwl"
+    # encrypt_and_save_file(f_path, data, key)
 
     @provide_temp_decrypted_file_path(f_path, key)
     def func(file_path):
         print(file_path)
-        with open(str(file_path), 'rb') as f:
+        with open(file_path, 'rb') as f:
             data = f.read()
 
-        print(data.decode())
+        print(data)
     func()
