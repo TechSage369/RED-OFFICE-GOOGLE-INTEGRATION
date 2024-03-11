@@ -2,8 +2,11 @@ import sys
 from cryptography.fernet import InvalidToken
 from googleapiclient.errors import HttpError, InvalidJsonError
 from red_office_google_integration_calendar.log.log_handler import logger
-
+import json
 from typing import Callable, Any
+'''
+NOTE: change exception handler documentation
+'''
 
 
 def handle_exception(func: Callable[..., Any]):
@@ -59,12 +62,12 @@ def handle_exception(func: Callable[..., Any]):
                 'message': e._get_reason(),
                 'function_name': func.__name__
             }
-        except (InvalidJsonError, TypeError, FileNotFoundError, FileExistsError, InvalidToken) as e:
-            error_message = {
-                'status': type(e).__name__,
-                'message': str(e),
-                'function_name': func.__name__
-            }
+        # except (InvalidJsonError, TypeError, FileNotFoundError, FileExistsError, InvalidToken) as e:
+        #     error_message = {
+        #         'status': type(e).__name__,
+        #         'message': str(e),
+        #         'function_name': func.__name__
+        #     }
         except Exception as e:
             error_message = {
                 'status': type(e).__name__,
@@ -73,7 +76,7 @@ def handle_exception(func: Callable[..., Any]):
             }
 
         logger.error(error_message)
-        print(error_message)
+        print(json.dumps(error_message))
         sys.exit(1)
 
     return wrapper

@@ -23,7 +23,7 @@ from red_office_google_integration_calendar.src import setting
     ```
 '''
 
-LOG_FILE = setting.LOG_FILE_PATH / 'log.jsonl'
+LOG_FILE = setting.LOG_DIRECTORY_PATH / 'log.jsonl'
 
 
 class JSONLinesFormatter(logging.Formatter):

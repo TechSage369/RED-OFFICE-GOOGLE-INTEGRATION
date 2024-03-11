@@ -25,24 +25,29 @@ TODO:
 '''
 
 
-def decrypt_file(path: pathlib.Path, key: bytes) -> bytes:
+class FileError(Exception):
     """
-    Decrypts the data from the specified file path using the provided key.
+    This exception is specifically designed for use with the `provide_temp_decrypted_file_path` decorator function. 
+    The decorator function decrypts a token or credentials file, creates a temporary path, and passes it to the decorated function. 
+    After the decorated function is executed, it destroys the decrypted file.
 
-        - param path: The path to the encrypted file.
-        - param key: The encryption/decryption key.
-        - return: The decrypted data.
+    In the case of a token, if there is a problem with the file, it raises a FileNotFoundError so that the GoogleCredential 
+    can generate a new token. However, in the case of credentials, it must throw an error. 
+
+    Usage in token:
+
+    if type(path) == FileNotFoundError:
+        get_new_token()
+
+    Usage in credentials:
+
+    if type(path) == FileNotFoundError:
+        raise FileError("Credentials file not found")
     """
-    try:
-        cipher = Fernet(key)
-        with open(path, 'rb') as f:
-            data = f.read()
-        decrypted_data = cipher.decrypt(data)
-        return decrypted_data
-    except InvalidToken:
-        raise InvalidToken("Invalid key or corrupted file")
-    except Exception as e:
-        raise Exception(f"Something went wrong while decryption: {e}")
+
+    def __init__(self, message, *args: object) -> None:
+        super().__init__(message, *args)
+        self.message = message
 
 
 def provide_temp_decrypted_file_path(encrypted_file_path: pathlib.Path, key: bytes) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
@@ -87,9 +92,8 @@ def provide_temp_decrypted_file_path(encrypted_file_path: pathlib.Path, key: byt
 
                 # Inject the temporary file path to the decorated function
                 return func(pathlib.Path(temp_file_path), *args, **kwargs)
-            except (FileNotFoundError, FileExistsError):
-                return func(None, *args, **kwargs)
-
+            except (FileNotFoundError, FileExistsError, PermissionError) as e:
+                return func(FileError(f'FileError: {type(e).__name__} -> {os.path.basename(encrypted_file_path)}'), *args, **kwargs)
             finally:
                 # Close and delete the temporary file
                 if temp_file_path is not None:
@@ -123,6 +127,27 @@ def encrypt_and_save_file(file_path: pathlib.Path, data: str, key: bytes) -> Non
         f.write(encrypted_data)
 
 
+def decrypt_file(path: pathlib.Path, key: bytes) -> bytes:
+    """
+    Decrypts the data from the specified file path using the provided key.
+
+        - param path: The path to the encrypted file.
+        - param key: The encryption/decryption key.
+        - return: The decrypted data.
+    """
+    try:
+        cipher = Fernet(key)
+        with open(path, 'rb') as f:
+            data = f.read()
+        decrypted_data = cipher.decrypt(data)
+        return decrypted_data
+
+    except InvalidToken:
+        raise InvalidToken("Invalid key or corrupted file")
+    except Exception as e:
+        raise Exception(f"Something went wrong while decryption: {e}")
+
+
 class InitializeCredential:
     def __init__(self, cred_data: str) -> None:
         self.__key = generate_key()
@@ -146,20 +171,4 @@ class InitializeCredential:
 
 
 if __name__ == '__main__':
-    # pass
-    from red_office_google_integration_calendar.src import setting
-
-    f_path = setting.SECRET_DIRECTORY_PATH / 'credentials.enc'
-    key = b'Lb-9cbIFCUCFcKSrWqRyEvEYuHAOB6pfMLpmHbrdnNA='
-
-    # data = "What the helwwl"
-    # encrypt_and_save_file(f_path, data, key)
-
-    @provide_temp_decrypted_file_path(f_path, key)
-    def func(file_path):
-        print(file_path)
-        with open(file_path, 'rb') as f:
-            data = f.read()
-
-        print(data)
-    func()
+    pass
