@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from red_office_google_integration_calendar.src.utils import handle_exception
+from red_office_google_integration.src.utils import handle_exception
 
 
 class TestHandleException(unittest.TestCase):

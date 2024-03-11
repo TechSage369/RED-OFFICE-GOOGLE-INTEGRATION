@@ -3,7 +3,7 @@ import tempfile
 import os
 import pathlib
 from typing import Any, Callable
-from red_office_google_integration_calendar.src import setting
+from red_office_google_integration.src import setting
 '''
 This module contains functions for encrypting and decrypting files, as well as a decorator function
 to create a temporary file that holds decrypted data and injects it into a function.

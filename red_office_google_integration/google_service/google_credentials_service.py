@@ -5,10 +5,10 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 from googleapiclient.discovery import build
-from red_office_google_integration_calendar.google_service.file_handler import (provide_temp_decrypted_file_path,
-                                                                                encrypt_and_save_file, FileError)
-from red_office_google_integration_calendar.src import setting
-from red_office_google_integration_calendar.src import utils
+from red_office_google_integration.google_service.file_handler import (provide_temp_decrypted_file_path,
+                                                                       encrypt_and_save_file, FileError)
+from red_office_google_integration.src import setting
+from red_office_google_integration.src import utils
 from typing import Any
 
 

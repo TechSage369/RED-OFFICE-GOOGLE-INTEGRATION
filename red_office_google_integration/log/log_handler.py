@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import json
-from red_office_google_integration_calendar.src import setting
+from red_office_google_integration.src import setting
 
 
 '''
