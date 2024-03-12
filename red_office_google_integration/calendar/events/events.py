@@ -1,7 +1,9 @@
 from typing import Any
-from red_office_google_integration_calendar.google_service.google_credentials_service import GoogleCalendarService  # noqa: E203,E402
-from red_office_google_integration_calendar.src.utils import handle_exception
-from red_office_google_integration_calendar.log.log_handler import logger
+from googleapiclient.discovery import build
+from red_office_google_integration.google_service.google_credentials_service import GoogleCalendarService  # noqa: E203,E402
+from red_office_google_integration.src.utils import handle_exception
+from red_office_google_integration.log.log_handler import logger
+from red_office_google_integration.src import setting
 
 
 class CalendarEvent:
@@ -19,10 +21,17 @@ class CalendarEvent:
     '''
 
     def __init__(self, key: bytes):
-        self.service = GoogleCalendarService(key).get_service()
+        self.__key = key
+        self.service = self.__build_service()
 
     @handle_exception
-    def create_event(self, calendarId: str, event_data: dict[str, Any]):
+    def __build_service(self):
+        cred = GoogleCalendarService(
+            self.__key, setting.SCOPE_CALENDAR, setting.FILE_NAME_CALENDAR_TOKEN, setting.FILE_NAME_CALENDAR_CREDENTIAL).get_service()
+        return build("calendar", "v3", credentials=cred)
+
+    @handle_exception
+    def create_event(self, calendarId: str, event_data: dict[str, Any]) -> dict:
         '''
             # Create_event
 
@@ -61,7 +70,7 @@ class CalendarEvent:
                                 },
                             }
 
-                event = GoogleCalendarService().create_event(calendarId,event_data)
+                event = GoogleCalendarService(key).create_event(calendarId,event_data)
 
 
             ```
@@ -120,7 +129,7 @@ class CalendarEvent:
 
             ## example without optional_paramater
 
-            event = GoogleCalendarService().list_event(calendarId,{})
+            event = GoogleCalendarService(key).list_event(calendarId,{})
 
             ### Example with Optional query parameters
             ```
@@ -141,6 +150,31 @@ class CalendarEvent:
         events = self.service.events().list(
             calendarId=calendarId, **optional_parameter).execute()
         return events
+
+    @handle_exception
+    def get_event(self, calendarId: str, eventId: str, **kwargs) -> dict:
+        '''
+
+        NOTE: write proper documentation
+            # Get Event
+
+            - calendarId: str
+            - eventId: str
+            - optional: dict
+                - find more details on [Events: get | Google Calendar](https://developers.google.com/calendar/api/v3/reference/events/get)
+
+        ## example
+
+            ```
+            event = GoogleCalendarService(key).get_event(calendarId,eventId)
+            ```
+
+
+
+        '''
+        event = self.service.events().get(calendarId=calendarId,
+                                          eventId=eventId, **kwargs).execute()
+        return event
 
 
 if __name__ == '__main__':

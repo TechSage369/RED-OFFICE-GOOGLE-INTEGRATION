@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from red_office_google_integration_calendar.src.utils import handle_exception
+from red_office_google_integration.src.utils import handle_exception
 
 
 class TestHandleException(unittest.TestCase):
@@ -33,8 +33,8 @@ class TestHandleException(unittest.TestCase):
         - Test the handle_exception decorator for an exception that should be raised.
     '''
 
-    @patch('red_office_google_integration_calendar.src.utils.sys.exit')
-    @patch('red_office_google_integration_calendar.log.log_handler.logger.error')
+    @patch('red_office_google_integration.src.utils.sys.exit')
+    @patch('red_office_google_integration.log.log_handler.logger.error')
     def test_handle_exception(self, mock_logger_error, mock_sys_exit):
 
         # Define a test function that will raise an exception

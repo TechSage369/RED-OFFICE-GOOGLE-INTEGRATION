@@ -3,7 +3,7 @@ import tempfile
 import os
 import pathlib
 from typing import Any, Callable
-from red_office_google_integration_calendar.src import setting
+from red_office_google_integration.src import setting
 '''
 This module contains functions for encrypting and decrypting files, as well as a decorator function
 to create a temporary file that holds decrypted data and injects it into a function.
@@ -149,11 +149,11 @@ def decrypt_file(path: pathlib.Path, key: bytes) -> bytes:
 
 
 class InitializeCredential:
-    def __init__(self, cred_data: str) -> None:
-        self.__key = generate_key()
+    def __init__(self, cred_data: str, file_name: str, key: bytes = generate_key()) -> None:
+        self.__key = key
         self.__cred_data = cred_data
         self.encrypted_data: bytes
-        self.__file_path = setting.SECRET_DIRECTORY_PATH / 'credentials.enc'
+        self.__file_path = setting.SECRET_DIRECTORY_PATH / file_name
         self.status = 'pending'
 
     def initialize(self):
