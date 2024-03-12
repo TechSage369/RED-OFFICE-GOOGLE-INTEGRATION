@@ -13,8 +13,8 @@ NOTE: Not Tested yet
 @click.command(help="Encrypts the credentials and saves the file.")
 @click.argument('cred', type=str, required=True)
 @click.option('-o', '--output', type=click.Path(writable=True, resolve_path=True), help='Output directory to save key')
-@click.option('-k', '--key', type=click.Path(writable=True, resolve_path=True), help='Custom key file path (uses fernet)')
-def init_cred(cred, output, key):
+@click.option('-k', '--key', type=click.STRING, help='Custom key file path (uses fernet)')
+def init_cred(cred, output, key: str):
     """
     Encrypts the credentials using a fernet key and saves the file.
 
@@ -29,20 +29,27 @@ def init_cred(cred, output, key):
     # Load cred from file or string
     if os.path.isfile(cred):
         with open(cred, 'r') as f:
-            payload_data = json.load(f)
+            cred = f.read()
     else:
         try:
-            payload_data = json.loads(cred)
+            cred = json.loads(cred)
         except json.JSONDecodeError:
             raise click.BadParameter(
                 'Payload must be a valid JSON string or a path to a JSON file.')
-
     if key:
+        print(key)
         result = InitializeCredential(
-            cred, setting.DEFAULT_CREDENTIAL_FILE_NAME, key)
+            cred, setting.DEFAULT_CREDENTIAL_FILE_NAME, key.encode())
     else:
         result = InitializeCredential(
             cred, setting.DEFAULT_CREDENTIAL_FILE_NAME)
+
+    result.initialize()
+
+    result = {
+        'status': result.status,
+        'key': result.get_key().decode()
+    }
 
     if output:
         with open(output, 'w') as f:
