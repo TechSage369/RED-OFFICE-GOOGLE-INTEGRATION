@@ -100,47 +100,48 @@ The following operations are supported for calendar events:
 ### Create Event
 To create an event, use the following JSON payload structure:
 
-
 ```json
 {
-    "key": "YOUR_API_KEY",
-    "calendarId": "primary",
-    "event_data": {
-        "summary": "Event summary",
-        "location": "Event location",
-        "description": "Event description",
-        "start": {
-            "dateTime": "Event start date and time",
-            "timeZone": "Event time zone"
-        },
-        "end": {
-            "dateTime": "Event end date and time",
-            "timeZone": "Event time zone"
-        },
-        "recurrence": [
-            "RRULE:FREQ=DAILY;COUNT=2"
-        ],
-        "attendees": [
-            {
-                "email": "attendee_email@example.com"
-            }
-        ],
-        "reminders": {
-            "useDefault": false,
-            "overrides": [
-                {
-                    "method": "email",
-                    "minutes": 1440
-                },
-                {
-                    "method": "popup",
-                    "minutes": 10
-                }
-            ]
-        }
-    }
+    "key": "YOUR_API_KEY",
+    "calendarId": "primary",
+    "event_data": {
+        "summary": "Event summary",
+        "location": "Event location",
+        "description": "Event description",
+        "start": {
+            "dateTime": "Event start date and time",
+            "timeZone": "Event time zone"
+        },
+        "end": {
+            "dateTime": "Event end date and time",
+            "timeZone": "Event time zone"
+        },
+        "recurrence": [
+            "RRULE:FREQ=DAILY;COUNT=2"
+        ],
+        "attendees": [
+            {
+                "email": "attendee_email@example.com"
+            }
+        ],
+        "reminders": {
+            "useDefault": false,
+            "overrides": [
+                {
+                    "method": "email",
+                    "minutes": 1440
+                },
+                {
+                    "method": "popup",
+                    "minutes": 10
+                }
+            ]
+        }
+    }
 }
+
 ```
+
 
 
 Ensure you replace `"YOUR_API_KEY"` with your actual API key. For more details on available properties and values, refer to the [Events: insert documentation](https://developers.google.com/calendar/api/v3/reference/events/insert).
