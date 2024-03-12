@@ -100,6 +100,7 @@ The following operations are supported for calendar events:
 ### Create Event
 To create an event, use the following JSON payload structure:
 
+
 ```json
 {
     "key": "YOUR_API_KEY",
@@ -140,6 +141,7 @@ To create an event, use the following JSON payload structure:
     }
 }
 ```
+
 
 Ensure you replace `"YOUR_API_KEY"` with your actual API key. For more details on available properties and values, refer to the [Events: insert documentation](https://developers.google.com/calendar/api/v3/reference/events/insert).
 
