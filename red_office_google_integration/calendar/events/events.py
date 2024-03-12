@@ -1,7 +1,9 @@
 from typing import Any
+from googleapiclient.discovery import build
 from red_office_google_integration.google_service.google_credentials_service import GoogleCalendarService  # noqa: E203,E402
 from red_office_google_integration.src.utils import handle_exception
 from red_office_google_integration.log.log_handler import logger
+from red_office_google_integration.src import setting
 
 
 class CalendarEvent:
@@ -19,7 +21,14 @@ class CalendarEvent:
     '''
 
     def __init__(self, key: bytes):
-        self.service = GoogleCalendarService(key).get_service()
+        self.__key = key
+        self.service = self.__build_service()
+
+    @handle_exception
+    def __build_service(self):
+        cred = GoogleCalendarService(
+            self.__key, setting.SCOPE_CALENDAR, setting.FILE_NAME_CALENDAR_TOKEN, setting.FILE_NAME_CALENDAR_CREDENTIAL).get_service()
+        return build("calendar", "v3", credentials=cred)
 
     @handle_exception
     def create_event(self, calendarId: str, event_data: dict[str, Any]) -> dict:

@@ -34,18 +34,16 @@ class GoogleCalendarService:
                 type of build, try to figure out
     '''
 
-    def __init__(self, key: bytes) -> None:
+    def __init__(self, key: bytes, scope: list[str], token_file_name: str, credential_file_name: str) -> None:
         self.key = key
-        self.scope = setting.SCOPE
-        self.token_file_path = setting.SECRET_DIRECTORY_PATH / 'token.enc'
-        self.credential_file_path = setting.SECRET_DIRECTORY_PATH / 'credentials.enc'
-        self.build_type = setting.BUILD_TYPE
+        self.scope = scope
+        self.token_file_path = setting.SECRET_DIRECTORY_PATH / token_file_name
+        self.credential_file_path = setting.SECRET_DIRECTORY_PATH / credential_file_name
 
     @utils.handle_exception
     def get_service(self) -> Any:
         creds = self.load_credentials()
-        service = build("calendar", "v3", credentials=creds)
-        return service
+        return creds
 
     @utils.handle_exception
     def load_credentials(self):
