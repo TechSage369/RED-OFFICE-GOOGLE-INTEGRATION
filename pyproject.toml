@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "red-office-google-integration-calendar"
+version = "0.1.0"
+description = ""
+authors = ["TechSage369 <rainishchal9@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+google-api-python-client = "^2.121.0"
+google-auth-httplib2 = "^0.2.0"
+google-auth-oauthlib = "^1.2.0"
+cryptography = "^42.0.5"
+click = "^8.1.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

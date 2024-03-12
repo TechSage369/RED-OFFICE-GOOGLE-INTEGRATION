@@ -1,0 +1,8 @@
+# Ignore Python cache files
+**/__pycache__/
+**/log.jsonl
+.venv/
+.vscode/
+red_office_google_integration/google_service/secrets/*
+sample_event/
+sample_output/
