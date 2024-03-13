@@ -1,3 +1,45 @@
+"""
+Module for handling Google Calendar events.
+
+This module provides functionalities to perform actions on Google Calendar events, such as creating, deleting, listing, and getting events.
+
+Commands:
+    - calendar: Group command for performing actions on Google Calendar events.
+    - event: Command to perform actions on Google Calendar events.
+
+Usage:
+    - calendar: Group command to interact with Google Calendar events.
+    - event: Command to execute actions like create, delete, list, or get on Google Calendar events.
+
+Example Usage:
+    To create an event:
+    ```bash
+        $ python main.py calander event create path_to_payload.json --output output_directory
+    ```
+    To delete an event:
+    ```bash
+        $ python main.py calander event delete path_to_payload.json
+    ```
+    To list events:
+    ```bash
+        $ python main.py calander event list path_to_payload.json
+    ```
+    To get an event:
+    
+    ```bash
+        $ python main.py calander event get path_to_payload.json
+    ```
+    `path_to_payload or JSON String`
+Parameters:
+    - action: The action to perform. Must be one of 'create', 'delete', 'list', 'get'.
+    - payload: Path to a JSON file containing the payload or a JSON string representing the payload.
+    - output: Optional parameter to specify an output directory for the result.
+
+Note:
+    The payload must contain necessary information like 'key' and 'calendarId' for the actions to be executed successfully.
+
+"""
+
 import click
 import os
 import json
