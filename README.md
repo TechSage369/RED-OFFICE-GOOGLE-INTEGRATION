@@ -37,6 +37,7 @@ The package is designed for ease of use, handling credentials internally. It can
    ```
 
 3. **Install Poetry:**
+   `(if you want to setup without/other virtual environment then, just check pyproject.toml you'll get dependencies there)`
    Poetry is a tool for dependency management and packaging in Python. Install it using pip:
    ``` shell
    pip install poetry
@@ -74,13 +75,13 @@ please follow this link till credential creation and save to json file
 
 ## Setup Credentials
 
-To initialize your credentials, provide the credential file name. You will receive the key in the CLI, which you should keep safe for later use.
+To initialize your credentials, provide the credential file name. You will receive the key in the CLI, which you should keep safe for later use as API_KEY.
 
 ```bash
 py main.py init-cred credential_filename
 ```
 
-You can also use optional parameters to specify a custom key (e.g., `Lb-9cbIFCUCFcKSrWqRyEvEYuHAOB6pfMLpmHbrdnNA=`) and mention the output file path to save the key.
+You can also use optional parameters to specify a custom key (e.g., `Lb-9cbIFCUCFcKSrWqRyEvEYuHAOB6pfMLpmHbrdnNA=`) and mention the output file path to save the key. `Fernet key 128-bit base64-encoded `
 
 ```bash
 py main.py init-cred credential_filename -o outputfilename -k Lb-9cbIFCUCFcKSrWqRyEvEYuHAOB6pfMLpmHbrdnNA

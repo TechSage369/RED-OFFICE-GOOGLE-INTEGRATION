@@ -32,6 +32,9 @@ plugins:
   - search
   - mkdocstrings
 
+extra:
+  generator: false
+
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -58,3 +61,4 @@ nav:
       - Source: source.md
       - Log Handler: log.md
       - Command Line Interface(CLI): CLI_handler.md
+  - Setup Guide: setup_guide.md
