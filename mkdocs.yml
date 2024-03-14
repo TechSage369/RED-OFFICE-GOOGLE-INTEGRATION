@@ -53,6 +53,10 @@ nav:
   - Home:
       - Welcome: index.md
       - Setup Guide: setup_guide.md
+
+  - Setup Guide: setup_guide.md
+  - Dev Docs:
+      - Project Structure: project_structure.md
       - Calendar:
           - Events: calendar-events.md
       - Google Service Handler:
@@ -61,4 +65,3 @@ nav:
       - Source: source.md
       - Log Handler: log.md
       - Command Line Interface(CLI): CLI_handler.md
-  - Setup Guide: setup_guide.md

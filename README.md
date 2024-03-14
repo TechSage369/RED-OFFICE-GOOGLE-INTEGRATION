@@ -288,3 +288,15 @@ py main.py calendar event get payload.json
 ```
 
 This command will retrieve the event specified in `payload.json`. Make sure to replace `"Your API key"`, `"Your calendar ID"`, and `"Event ID to retrieve"` with your actual API key, calendar ID, and event ID respectively.
+
+___
+
+## Get Documentation
+
+To access more detailed documentation and the development documentation for your project, run the following command in the base directory of your project:
+
+```bash
+mkdocs serve
+```
+
+This command will start a local server and serve your MkDocs documentation. You can then access the documentation by opening a web browser and navigating to the provided URL (typically http://127.0.0.1:8000/).

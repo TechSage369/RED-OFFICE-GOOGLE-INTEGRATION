@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "red-office-google-integration-calendar"
+name = "red-office-google-integration"
 version = "0.1.0"
 description = ""
 authors = ["TechSage369 <rainishchal9@gmail.com>"]
