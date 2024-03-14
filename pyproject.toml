@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "red-office-google-integration-calendar"
+name = "red-office-google-integration"
 version = "0.1.0"
 description = ""
 authors = ["TechSage369 <rainishchal9@gmail.com>"]
@@ -12,6 +12,12 @@ google-auth-httplib2 = "^0.2.0"
 google-auth-oauthlib = "^1.2.0"
 cryptography = "^42.0.5"
 click = "^8.1.7"
+
+
+[tool.poetry.group.documentation.dependencies]
+mkdocs = "^1.5.3"
+mkdocs-material = {extras = ["imaging"], version = "^9.5.13"}
+mkdocstrings = {extras = ["python"], version = "^0.24.1"}
 
 
 [build-system]

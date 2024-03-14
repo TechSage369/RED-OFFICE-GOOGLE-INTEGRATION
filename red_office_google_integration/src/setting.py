@@ -1,3 +1,6 @@
+'''
+    Contains Settings for this project
+'''
 from pathlib import Path
 
 

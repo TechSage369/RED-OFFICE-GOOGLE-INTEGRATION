@@ -1,27 +1,24 @@
+
+"""
+Module for handling logging functionality.
+
+This module sets up logging configuration using a custom JSONLinesFormatter and a RotatingFileHandler.
+It provides a structured way to log messages with timestamps, log levels, messages, module names, and line numbers.
+
+Example Usage:
+```
+    logger.critical("Critical message")
+    logger.error("Error message")
+    logger.debug("Debug message")
+    logger.warning("Warning message")
+    logger.info("Info message")
+```
+"""
 import logging
 from logging.handlers import RotatingFileHandler
 import json
 from red_office_google_integration.src import setting
 
-
-'''
-    # Logger configuration file
-
-    Import this file and use logger
-
-    Example:
-
-    ```
-    form this_file import logger
-
-    logger.critical(f"Test")
-    logger.error("Test")
-    logger.debug("Test")
-    logger.warning("Test")
-    logger.info("Test")
-
-    ```
-'''
 
 LOG_FILE = setting.LOG_DIRECTORY_PATH / 'log.jsonl'
 
@@ -36,6 +33,15 @@ class JSONLinesFormatter(logging.Formatter):
     """
 
     def format(self, record):
+        """
+        Format the log record as a JSON object.
+
+        Args:
+            record (LogRecord): The log record to be formatted.
+
+        Returns:
+            (str): JSON representation of the log record.
+        """
         message = {
             'timestamp': self.formatTime(record),
             'level': record.levelname,

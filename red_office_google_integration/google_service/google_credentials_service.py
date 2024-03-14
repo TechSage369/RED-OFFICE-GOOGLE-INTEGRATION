@@ -1,10 +1,7 @@
-import os
 import pathlib
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-
-from googleapiclient.discovery import build
 from red_office_google_integration.google_service.file_handler import (provide_temp_decrypted_file_path,
                                                                        encrypt_and_save_file, FileError)
 from red_office_google_integration.src import setting
@@ -14,27 +11,46 @@ from typing import Any
 
 class GoogleCalendarService:
     '''
-    All the Google Credentials are packed inside this class
+        A class for managing Google Calendar API credentials and interacting with the service.
 
-    ## Example
-    ```
-        google_cal_service = GoogleCalendarService(key)
+        Args:
+            key (bytes): The encryption key.
+            scope (list[str]): The Google API scope.
+            token_file_name (str): The name of the file containing the token.
+            credential_file_name (str): The name of the file containing the credentials.
+
+        Methods:
+            get_service(): Retrieves the Google Calendar service.
+            load_credentials(): Loads the Google Calendar API credentials.
+            refresh_or_acquire_new_token(): Refreshes or acquires a new Google Calendar API token.
+            save_token(): Saves the Google Calendar API token.
+
+        Example:
+        ```
+        google_cal_service = GoogleCalendarService(key, scope, 'token.json', 'credentials.json')
         service = google_cal_service.get_service()
-
-        Then
-
         service.events().insert(calendarId=calendarId, body=event_data).execute()
-    ```
+        ```
+
         TODO:
-            - write unittest
-            - more docs
-            - optimization
-        NOTE:
-            - return type of ger_service is set to Any, Didn't find its return
-                type of build, try to figure out
+            - Write unit tests.
+            - Add more documentation.
+            - Optimize the code.
     '''
 
     def __init__(self, key: bytes, scope: list[str], token_file_name: str, credential_file_name: str) -> None:
+        """
+            Initializes a new instance of the GoogleCalendarService class.
+
+            Args:
+                key (bytes): The encryption key.
+                scope (list[str]): The Google API scope.
+                token_file_name (str): The name of the file containing the token.
+                credential_file_name (str): The name of the file containing the credentials.
+
+            Returns:
+                None
+        """
         self.key = key
         self.scope = scope
         self.token_file_path = setting.SECRET_DIRECTORY_PATH / token_file_name
@@ -42,12 +58,24 @@ class GoogleCalendarService:
 
     @utils.handle_exception
     def get_service(self) -> Any:
+        '''
+        NOTE: I couldn't find what datatype it reurns so I set to Any
+        Retrieves the Google Calendar service credentials.
+
+        Returns:
+            Any: The Google Calendar service credentials. 
+
+        '''
         creds = self.load_credentials()
         return creds
 
     @utils.handle_exception
     def load_credentials(self):
         '''
+            Loads the credentials from the specified token file, decrypting it if necessary, and handles token expiration.
+
+            Returns:
+                Credentials: The loaded and decrypted Google OAuth2 credentials.
         NOTE: to pass provide_temp_decrypted_file_path used inner function so we can pass selfs
         '''
         @provide_temp_decrypted_file_path(self.token_file_path, self.key)
@@ -66,7 +94,7 @@ class GoogleCalendarService:
         @provide_temp_decrypted_file_path(self.credential_file_path, self.key)
         def inner_func(file_path, inner_creds):
             if type(file_path) == FileError:
-                raise FileError(file_path)
+                raise FileError(f"{file_path}")
             if inner_creds and inner_creds.expired and inner_creds.refresh_token:
                 inner_creds.refresh(Request())
 

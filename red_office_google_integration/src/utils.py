@@ -10,46 +10,39 @@ NOTE: change exception handler documentation
 
 def handle_exception(func: Callable[..., Any]):
     '''
-    # Decorator function for exception handling
+    Decorator function for exception handling.
 
-    `This decorator function is used for exception handling in various modules of the project.
-    It catches specific exceptions and logs them using the project's logger, prints error(message will be in dict),
-    then exits the program with a status code of 1.`
+    This decorator function is used for exception handling in various modules of the project.
+    It catches specific exceptions, logs them using the project's logger, prints the error message (in dict format),
+    and exits the program with a status code of 1.
 
-    ### Parameters
+    Parameters:
+        func (function): The function to be decorated.
 
-    - `func` (function): The function to be decorated.
+    Returns:
+        wrapper (function): The wrapped function with exception handling logic.
 
-    ### Returns
+    Exceptions Handled:
+        - HttpError: Handles Google API HTTP errors, extracting relevant information such as status code and message.
+        - InvalidJsonError, TypeError, FileNotFoundError, FileExistsError, InvalidToken: Handles specific errors with custom error messages.
+        - Exception: Handles all other exceptions with a generic error message.
 
-    - `wrapper` (function): The wrapped function with exception handling logic.
+    Logging:
+        Logs the error message using the project's logger with the following format:
+            {
+                'status': <Exception Type>,
+                'status_code': <HTTP Status Code if applicable>,
+                'message': <Exception Message>,
+                'function_name': <Name of the Function where the Exception Occurred>
+            }
 
-    ### Exceptions Handled
-
-    - `HttpError`: Handles Google API HTTP errors, extracting relevant information such as status code and message.
-    - `InvalidJsonError`, `TypeError`, `FileNotFoundError`, `FileExistsError`, `InvalidToken`: Handles specific errors with custom error messages.
-    - `Exception`: Handles all other exceptions with a generic error message.
-
-    ### Logging
-
-    Logs the error message using the project's logger with the following format:
-        ```
-        {
-            'status': <Exception Type>,
-            'status_code': <HTTP Status Code if applicable>,
-            'message': <Exception Message>,
-            'function_name': <Name of the Function where the Exception Occurred>
-        }
-        ```
-
-    ## Usage:
+    Usage:
     ```
     @handle_exception
     def my_function():
         # Function code that may raise exceptions
         pass
     ```
-
     '''
     def wrapper(*args, **kwargs):
         try:

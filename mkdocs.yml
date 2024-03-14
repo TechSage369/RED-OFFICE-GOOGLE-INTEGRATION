@@ -1,0 +1,67 @@
+site_name: Red Office Google Integration's Documentation
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+  language: en
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+      primary: teal
+      accent: purple
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+      primary: teal
+      accent: lime
+
+plugins:
+  - social
+  - search
+  - mkdocstrings
+
+extra:
+  generator: false
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
+
+nav:
+  - Home:
+      - Welcome: index.md
+      - Setup Guide: setup_guide.md
+
+  - Setup Guide: setup_guide.md
+  - Dev Docs:
+      - Project Structure: project_structure.md
+      - Calendar:
+          - Events: calendar-events.md
+      - Google Service Handler:
+          - File Handler: google_service_file_handler.md
+          - Google Credentials Service: google_service_credential_service.md
+      - Source: source.md
+      - Log Handler: log.md
+      - Command Line Interface(CLI): CLI_handler.md
