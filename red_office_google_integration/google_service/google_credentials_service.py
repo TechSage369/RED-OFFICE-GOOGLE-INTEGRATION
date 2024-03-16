@@ -9,7 +9,7 @@ from red_office_google_integration.src import utils
 from typing import Any
 
 
-class GoogleCalendarService:
+class GoogleCredentialService:
     '''
         A class for managing Google Calendar API credentials and interacting with the service.
 
@@ -57,7 +57,7 @@ class GoogleCalendarService:
         self.credential_file_path = setting.SECRET_DIRECTORY_PATH / credential_file_name
 
     @utils.handle_exception
-    def get_service(self) -> Any:
+    def get_service(self) -> Credentials:
         '''
         NOTE: I couldn't find what datatype it reurns so I set to Any
         Retrieves the Google Calendar service credentials.
