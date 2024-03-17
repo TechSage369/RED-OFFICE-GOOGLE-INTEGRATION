@@ -1,11 +1,13 @@
 
-from typing import Any
+from typing import Any, Literal
 from googleapiclient.discovery import build
 from red_office_google_integration.google_service.google_credentials_service import GoogleCredentialService  # noqa: E203,E402
 from red_office_google_integration.src.utils import handle_exception
 from red_office_google_integration.log.log_handler import logger
 from red_office_google_integration.src import setting
 import json
+
+valueOption = Literal['RAW', 'USER_ENTERED']
 
 
 class SpreadSheet:
@@ -105,13 +107,11 @@ class SpreadSheet:
         Returns:
         - dict: A dictionary containing the retrieved values for each range specified.
 
-        Raises:
-        - Exception: If there is an error while retrieving the data.
     """
         return self.__service.spreadsheets().values().batchGet(spreadsheetId=spreadsheetId, ranges=ranges, **kwargs).execute()
 
     @handle_exception
-    def update_values(self, spreadsheetId, range: str, valueInputOption: str, values: list[list], **kwargs):
+    def update_values(self, spreadsheetId, range: str, valueInputOption: valueOption, values: list[list], **kwargs):
         """
             Updates values in a Google Sheet within the specified range.
 
@@ -144,7 +144,7 @@ class SpreadSheet:
         return self.__service.spreadsheets().values().update(spreadsheetId=spreadsheetId, range=range, valueInputOption=valueInputOption, body=body, **kwargs).execute()
 
     @handle_exception
-    def batch_update_values(self, spreadsheet_id: str, valueInputOption, data: list[dict], **kwargs) -> dict:
+    def batch_update_values(self, spreadsheet_id: str, valueInputOption: valueOption, data: list[dict], **kwargs) -> dict:
         """
             Updates multiple cells in a Google Sheet using a single batch update API call.
 
@@ -180,7 +180,7 @@ class SpreadSheet:
         return res
 
     @handle_exception
-    def append_data(self, spreadsheetId: str, range: str, valueInputOption: str, values: list[list], **kwargs) -> dict:
+    def append_data(self, spreadsheetId: str, range: str, valueInputOption: valueOption, values: list[list], **kwargs) -> dict:
         """
             Appends values to a Google Sheet starting from the specified range.
 
@@ -214,49 +214,48 @@ class SpreadSheet:
 
 
 if __name__ == '__main__':
-    # k = "Lb-9cbIFCUCFcKSrWqRyEvEYuHAOB6pfMLpmHbrdnNA="
+    k = "Lb-9cbIFCUCFcKSrWqRyEvEYuHAOB6pfMLpmHbrdnNA="
 
-    # obj = SpreadSheet(k.encode())
-    # # result = obj.get_data(
-    # #     '1Q_cYCpmnb1XtCnm7YlCl3ZcpX_GM3IzBZRsLue2dGkc', 'Form Responses 1', majorDimension='COLUMNS')
-    # # print(result)
-    # ranges = ['Form Responses 1!A2:D7', 'Form Responses 1']
-    # # body = {
-    # #     'ranges': ranges,
-    # #     'valueRenderOption': 'UNFORMATTED_VALUE'
-    # # }
+    obj = SpreadSheet(k.encode())
+    spreadsheetId = '1Q_cYCpmnb1XtCnm7YlCl3ZcpX_GM3IzBZRsLue2dGkc'
+# ________________________get_data_tesing_________________________________________________________
+    # result = obj.get_data(spreadsheetId,
+    #                       'Form Responses 1', majorDimension='ROWS')
+    # print(json.dumps(result, indent=2))
+# _________________________________________________________________________________________________
 
-    # # result = service.spreadsheets().values().batchGet(
-    # #     spreadsheetId=sid, ranges=ranges).execute()
-    # # body = {
-    # #     'values': [
-    # #         [1, 2, 3], [3, 4, 5],
-    # #     ]
-    # # }
-    # # obj.update_values('1Q_cYCpmnb1XtCnm7YlCl3ZcpX_GM3IzBZRsLue2dGkc',
-    # #                   'A20:C22', 'USER_ENTERED', body)
+# ________________________get_bath_data_testing___________________________________________________
+    # ranges = ['Form Responses 1!A2:D7', 'Form Responses 1!E4:F5']
 
-    # names = ['Aadithya Sharma Dahal', 'Vinayak Pradhan', 'Frank Br. Gomes',
-    #          'Suraksha Rai', 'Treeja Lepcha', 'MD Kaif', 'Razee', 'Sahitya Gurung', 'Nishchal Rai']
+    # result = obj.get_batch_data(
+    #     spreadsheetId, ranges)
+    # print(json.dumps(result, indent=2))
+# ___________________________________________________________________________________________________
 
-    # # values = [["Nishchal Rai"]]
+# ________________________update_values_testing______________________________________________________
+    # valueInputOption = "USER_ENTERED"
+    # values = [['Nishchal Rai'], ['Techsage']]
+    # result = obj.update_values(spreadsheetId, 'B16', valueInputOption, values)
+    # print(json.dumps(result, indent=2))
+# _____________________________________________________________________________________________________
 
+# ______________________batch_update_values___________________________________________________________
+
+    # valueInputOption = "USER_ENTERED"
     # data = [
     #     {'range': 'D15', 'values': [[2]]},
     #     {'range': 'F17:G17', 'values': [['Aadithya Sharma', 22]]},
-    #     {'range': 'D17:E17', 'values': [['Nishhcal Rai', 22]]},
+    #     {'range': 'D17:E17', 'values': [['Nishhcal Rai', 22]]},]
 
-    # ]
+    # result = obj.batch_update_values(spreadsheetId, valueInputOption, data)
+    # print(json.dumps(result, indent=2))
+# ______________________________________________________________________________________________________
+# ________________________________________append_data____________________________________________________
+    # names = ['Nishchal Rai', 'Aadithya Sharma Dahal', 'Frank Brano Gomes',
+    #          'Muhammed Kaif', 'Suraksha Rai', 'Shreya Sharma', 'Vinakay Pradhan', 'Sahitya Gurung']
 
-    # # for i in names:
-    # #     values = [[i]]
-    # # res = []
-    # # for i in names:
-    # #     res.append([i])
+    # values = [[i] for i in names]
 
-    # # obj.update_values(
-    # #     "1Q_cYCpmnb1XtCnm7YlCl3ZcpX_GM3IzBZRsLue2dGkc", 'Form Responses 1!c14:c24', 'USER_ENTERED', res)
-
-    # obj.batch_update_values(
-    #     "1Q_cYCpmnb1XtCnm7YlCl3ZcpX_GM3IzBZRsLue2dGkc", 'USER_ENTERED', data)
-    pass
+    # result = obj.append_data(
+    #     spreadsheetId, 'NameList!A1', 'USER_ENTERED', values)
+    # print(json.dumps(result, indent=2))
