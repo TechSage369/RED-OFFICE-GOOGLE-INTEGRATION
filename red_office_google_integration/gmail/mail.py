@@ -33,10 +33,10 @@ class Gmail:
         return build("gmail", "v1", credentials=cred)
 
     @handle_exception
-    def create_draft(self, body: EmailCreation, userId: str = 'me'):
+    def create_draft(self, email: EmailCreation, userId: str = 'me'):
 
         create_message = {
-            'message': {"raw": body.get_mime_message_encoded()}
+            'message': {"raw": email.get_mime_message_encoded()}
         }
 
         draft = (self.__service.users()
@@ -44,7 +44,7 @@ class Gmail:
                  .create(userId=userId, body=create_message)
                  .execute()
                  )
-        print(draft)
+        return draft
 
     @handle_exception
     def get_email_list(self, query: str, userId: str = 'me', **kwargs):
@@ -77,7 +77,6 @@ if __name__ == '__main__':
 # _____________________test create draft with/without attachment______________
     # header = {
     #     'To': 'techsage@gmail.com',
-    #     'From': 'aadithya223@gmail.com',
     #     'Subject': 'Testing Gmail API v1',
     # }
 
@@ -94,13 +93,15 @@ if __name__ == '__main__':
 
 # _____________________test get email list______________________________
     # res = obj_mail.get_email_list(
-    #     'has:attachment from:marc@beermann.io', maxResults=10)
+    #     'has:attachment to:6sigmainstitute@gmail.com', maxResults=10)
     # print(json.dumps(res, indent=2))
 # ____________________________________________________________________________________
 
-    # res = obj_mail.get_email("18de4b53777de208")
+    # res = obj_mail.get_email("18e2d871a1f36de7", format="minimal")
     # print(json.dumps(res, indent=2))
+
 # ____________________Get Attachment____________________________________
-    attachmentId = "ANGjdJ8szlJ2FcznCdjtxqy8PeranCxq8ARdao4MiSzJy8-I-LKCnKyB-h7ZHo9FQBOxqtNWcTyZpu4e62-K1rZsGTAEnqJg3u23fVUGUyRDD_RbrvlcqWpc8k236EVQ31tDcUg6pjmRqNiYwOisoVBx-c3GdEH1MlvbKMNJeA9D1kZG3b8y65zzMuRqMQln82O-pIqpRNNKsG_40bYaDr2lf2HRGKrJKKih8bg-WwHGYfM6swBYfKmQJdHlr4GjhbgH9Eeck-QxIzeZMuU3gprC-UwFwgFokpl5UDXDypGtz-vnWnvkZCREENyWVvIu49mxH2R3JAS9WOG-HWSZ7E4llPFhGSvMM56dRbMCBV-TEEQQl4yVkSE9Z5rXKe3lrj72wMsjl8Dq0pWIoiok"
-    data = obj_mail.get_attachment_encoded("18e2d871a1f36de7", attachmentId)
-    print(base64.urlsafe_b64decode(data))
+    # attachmentId = "ANGjdJ8szlJ2FcznCdjtxqy8PeranCxq8ARdao4MiSzJy8-I-LKCnKyB-h7ZHo9FQBOxqtNWcTyZpu4e62-K1rZsGTAEnqJg3u23fVUGUyRDD_RbrvlcqWpc8k236EVQ31tDcUg6pjmRqNiYwOisoVBx-c3GdEH1MlvbKMNJeA9D1kZG3b8y65zzMuRqMQln82O-pIqpRNNKsG_40bYaDr2lf2HRGKrJKKih8bg-WwHGYfM6swBYfKmQJdHlr4GjhbgH9Eeck-QxIzeZMuU3gprC-UwFwgFokpl5UDXDypGtz-vnWnvkZCREENyWVvIu49mxH2R3JAS9WOG-HWSZ7E4llPFhGSvMM56dRbMCBV-TEEQQl4yVkSE9Z5rXKe3lrj72wMsjl8Dq0pWIoiok"
+    # data = obj_mail.get_attachment_encoded("18e2d871a1f36de7", attachmentId)
+    # print(base64.urlsafe_b64decode(data))
+    pass

@@ -48,19 +48,20 @@ class EmailCreation:
 
 
 if __name__ == '__main__':
-    header = {
-        'To': 'techsage@gmail.com',
-        'From': 'aadithya223@gmail.com',
-        'Subject': 'Testing Gmail API v1',
-    }
+    # header = {
+    #     'To': 'techsage@gmail.com',
+    #     'From': 'aadithya223@gmail.com',
+    #     'Subject': 'Testing Gmail API v1',
+    # }
 
-    body = "THis is just for testing <b> bold </b>"
-    subtype = 'html'
-    file_path = pathlib.Path('data.csv')
+    # body = "THis is just for testing <b> bold </b>"
+    # subtype = 'html'
+    # file_path = pathlib.Path('data.csv')
 
-    obj = EmailCreation(header, body, subtype)
+    # obj = EmailCreation(header, body, subtype)
 
-    obj.add_file(pathlib.Path('data.csv'))
-    obj.add_file(pathlib.Path('README.md'))
+    # obj.add_file(pathlib.Path('data.csv'))
+    # obj.add_file(pathlib.Path('README.md'))
 
-    obj.get_mime_message()
+    # obj.get_mime_message()
+    pass
