@@ -2,15 +2,12 @@ import click
 import os
 import json
 import base64
-import mimetypes
 
 from pyparsing import Any
 from red_office_google_integration.gmail.mail import Gmail
 from red_office_google_integration.gmail.message_creation import EmailCreation
 
 from red_office_google_integration.src.utils import handle_exception
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 
 @click.group(help="Gmail Where you can perform mail action")
@@ -24,6 +21,19 @@ def mail():
 @click.argument('payload', type=str, required=True)
 @click.option('-a', '--attachment', multiple=True, type=click.Path(writable=True, resolve_path=True), help='attachment file')
 def create_draft(payload, attachment):
+    """
+        Create a draft email in Gmail using the provided payload.
+
+        Args:
+            payload (str): Path to a JSON file or a JSON string containing the email payload.
+            attachment (list): List of paths to attachment files to be included in the email draft.
+
+        Raises:
+            click.BadParameter: If the payload is not a valid JSON string or file path.
+
+        Returns:
+            None
+    """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
             payload_data = json.load(f)
