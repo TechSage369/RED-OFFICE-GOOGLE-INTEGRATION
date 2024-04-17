@@ -61,6 +61,14 @@ def create_draft(payload, attachment):
 @click.command(help="Get email")
 @click.argument('payload', type=str, required=True)
 def get_email(payload):
+    """
+        Get an email.
+
+        Args:
+            payload (str): Path to a JSON file or a JSON string containing the email data.
+
+        Returns:None
+    """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
             payload_data = json.load(f)
@@ -89,6 +97,16 @@ def get_email(payload):
 @click.argument('payload', type=str, required=True)
 @click.option('-o', '--output', type=click.Path(file_okay=False, dir_okay=True, writable=True, resolve_path=True), help='Output directory', required=True)
 def download_attachment(payload, output):
+    """
+        Download an attachment from an email.
+
+        Args:
+            payload (str): Path to a JSON file or a JSON string containing the email data.
+            output (str): Path to the output directory.
+
+        Returns:
+            None
+    """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
             payload_data = json.load(f)
@@ -127,6 +145,17 @@ def download_attachment(payload, output):
 
 @handle_exception
 def save_attachment(directory_name, filename, data: bytes):
+    """
+        Save an attachment to a file.
+
+        Args:
+            directory_name (str): Path to the output directory.
+            filename (str): Name of the file to save.
+            data (bytes): Attachment data.
+
+        Returns:
+            None
+    """
     with open(os.path.join(directory_name, filename), 'wb') as f:
         f.write(data)
 
@@ -134,6 +163,15 @@ def save_attachment(directory_name, filename, data: bytes):
 @click.command(help="List email through query parameter")
 @click.argument('payload', type=str, required=True)
 def get_email_list(payload):
+    """
+    List emails based on query parameters.
+
+    Args:
+        payload (str): Path to a JSON file or a JSON string containing the email data.
+
+    Returns:
+        dict: The list of emails that match the query parameters.
+    """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
             payload_data = json.load(f)

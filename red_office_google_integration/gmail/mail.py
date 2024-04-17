@@ -9,6 +9,16 @@ import base64
 
 
 class Gmail:
+    '''
+        Class for interacting with Gmail API.
+
+        Args:
+            key (bytes): The key used for authentication.
+
+        Attributes:
+            __key (bytes): The key used for authentication.
+            __service: The Google service.
+    '''
 
     def __init__(self, key: bytes) -> None:
         '''
@@ -34,6 +44,16 @@ class Gmail:
 
     @handle_exception
     def create_draft(self, email: EmailCreation, userId: str = 'me'):
+        '''
+        Create a draft email in Gmail.
+
+        Args:
+            email (EmailCreation): The email to be created.
+            userId (str, optional): The user ID. Defaults to 'me'.
+
+        Returns:
+            dict: The created draft email.
+        '''
 
         create_message = {
             'message': {"raw": email.get_mime_message_encoded()}
@@ -48,6 +68,17 @@ class Gmail:
 
     @handle_exception
     def get_email_list(self, query: str, userId: str = 'me', **kwargs):
+        '''
+            Get a list of emails based on a query.
+
+            Args:
+                query (str): The query to filter emails.
+                userId (str, optional): The user ID. Defaults to 'me'.
+                **kwargs: Additional query parameters.
+
+            Returns:
+                dict: The list of emails matching the query.
+        '''
         results = self.__service.users().messages().list(
             userId=userId, q=query, **kwargs).execute()
         return results
@@ -55,6 +86,17 @@ class Gmail:
 
     @handle_exception
     def get_email(self, id: str, userId: str = 'me', **kwargs):
+        '''
+            Get an email by ID.
+
+            Args:
+                id (str): The ID of the email.
+                userId (str, optional): The user ID. Defaults to 'me'.
+                **kwargs: Additional query parameters.
+
+            Returns:
+                dict: The email matching the ID.
+        '''
         result = self.__service.users().messages().get(
             userId=userId, id=id, **kwargs).execute()
         return result
@@ -62,6 +104,17 @@ class Gmail:
 
     @handle_exception
     def get_attachment_encoded(self, messageId: str, attachmentId: str, userId: str = 'me'):
+        '''
+            Get an attachment by its ID.
+
+            Args:
+                messageId (str): The ID of the message containing the attachment.
+                attachmentId (str): The ID of the attachment.
+                userId (str, optional): The user ID. Defaults to 'me'.
+
+            Returns:
+                bytes: The base64-encoded attachment data.
+        '''
         attachment = self.__service.users().messages().attachments().get(
             userId=userId, messageId=messageId, id=attachmentId).execute()
         file_data = attachment['data']

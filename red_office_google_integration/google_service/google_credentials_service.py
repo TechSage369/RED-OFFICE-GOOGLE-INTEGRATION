@@ -59,8 +59,6 @@ class GoogleCredentialService:
     @utils.handle_exception
     def get_service(self) -> Credentials:
         '''
-        NOTE: I couldn't find what datatype it reurns so I set to Any
-        Retrieves the Google Calendar service credentials.
 
         Returns:
             Any: The Google Calendar service credentials. 
