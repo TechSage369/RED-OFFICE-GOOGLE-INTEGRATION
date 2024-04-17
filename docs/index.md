@@ -3,13 +3,13 @@ Red-Office-Google-Integration is a comprehensive package designed to simplify in
 
 #### Features Overview
 - **Calendar**: Create, list, get, and delete events in Google Calendar. Designed for extensibility to accommodate future feature additions.
-- **Sheets** (Work in Progress):
+- **Sheets**:
     - Insert CSV content in a defined range.
     - Replace a defined range with CSV content.
     - Get full worksheet data (and from specified ranges).
     - Replace a single cell.
     - Output data in JSON or CSV format.
-- **Gmail** (Work in Progress):
+- **Gmail**:
     - Get emails by label, recipient, or 'has attachment' status.
     - Archive and label emails by ID.
     - Create draft emails, with the ability to attach files.

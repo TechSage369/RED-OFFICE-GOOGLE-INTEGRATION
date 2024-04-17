@@ -6,22 +6,22 @@ import os
 
 
 '''
-NOTE: Not Tested yet
+NOTE: 
 '''
 
 
 @click.command(help="Encrypts the credentials and saves the file.")
 @click.argument('cred', type=str, required=True)
 @click.option('-o', '--output', type=click.Path(writable=True, resolve_path=True), help='Output directory to save key')
-@click.option('-k', '--key', type=click.STRING, help='Custom key file path (uses fernet)')
-def init_cred(cred, output, key: str):
+@click.option('-k', '--key', type=click.STRING, help='Custom key in string')
+def init_cred(cred, output, key: str) -> None:
     """
     Encrypts the credentials using a fernet key and saves the file.
 
     Args:
         cred (str): Path to the credential file | in string.
-        output (str): Path to the output directory where the encrypted file will be saved.
-        key (str): Path to the key file used for encryption (fernet key by default).
+        output (filepath,optional): Path to the output directory where the encrypted file will be saved.
+        key (str,optional): Path to the key file used for encryption (fernet key by default).
 
     Returns:
         None

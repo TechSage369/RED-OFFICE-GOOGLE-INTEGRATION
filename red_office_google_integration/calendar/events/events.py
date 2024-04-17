@@ -5,11 +5,15 @@
     - optional:
         - Implement update_event()
         - patch_event() methods.
+    NOTE:
+        Features that can be added:
+        - find and replace
+        
 
 '''
 from typing import Any
 from googleapiclient.discovery import build
-from red_office_google_integration.google_service.google_credentials_service import GoogleCalendarService  # noqa: E203,E402
+from red_office_google_integration.google_service.google_credentials_service import GoogleCredentialService  # noqa: E203,E402
 from red_office_google_integration.src.utils import handle_exception
 from red_office_google_integration.log.log_handler import logger
 from red_office_google_integration.src import setting
@@ -44,7 +48,7 @@ class CalendarEvent:
         Returns:
             (cred): The Google Calendar service.
         '''
-        cred = GoogleCalendarService(
+        cred = GoogleCredentialService(
             self.__key, setting.SCOPE_CALENDAR, setting.FILE_NAME_CALENDAR_TOKEN, setting.FILE_NAME_CALENDAR_CREDENTIAL).get_service()
         return build("calendar", "v3", credentials=cred)
 
@@ -116,7 +120,7 @@ class CalendarEvent:
 
         ## example
 
-            event = GoogleCalendarService().delete_event(calendarId,eventId)
+            event = GoogleCredentialService().delete_event(calendarId,eventId)
 
             ### Example with Optional query parameters
             ```
@@ -155,7 +159,7 @@ class CalendarEvent:
         Example:
             ```
             # Example without optional parameters
-            event = GoogleCalendarService(key).list_event(calendarId, {})
+            event = GoogleCredentialService(key).list_event(calendarId, {})
 
             # Example with optional query parameters
             optional_parameter = {

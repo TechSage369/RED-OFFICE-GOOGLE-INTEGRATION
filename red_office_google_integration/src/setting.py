@@ -23,6 +23,17 @@ SCOPE_CALENDAR = ["https://www.googleapis.com/auth/calendar.events"]
 FILE_NAME_CALENDAR_TOKEN = 'calendar_token.enc'
 FILE_NAME_CALENDAR_CREDENTIAL = DEFAULT_CREDENTIAL_FILE_NAME
 
+
+# Sheets Setting
+SCOPE_SPREADSHEETS = ["https://www.googleapis.com/auth/spreadsheets"]
+FILE_NAME_SPREADSHEETS_TOKEN = 'spreadsheet_token.enc'
+FILE_NAME_SPREADSHEETS_CREDENTIAL = DEFAULT_CREDENTIAL_FILE_NAME
+
+# Gmail Setting
+SCOPE_GMAIL = ["https://mail.google.com/"]
+FILE_NAME_GMAIL_TOKEN = 'gmail_token.enc'
+FILE_NAME_GMAIL_CREDENTIAL = DEFAULT_CREDENTIAL_FILE_NAME
+
 if __name__ == '__main__':
     # print(type(LOG_DIRECTORY_PATH))
     pass
