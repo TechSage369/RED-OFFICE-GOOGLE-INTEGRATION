@@ -183,9 +183,6 @@ def append_data(payload):
 
         Args:
             payload (str): Path to a JSON file or a JSON string containing the request payload.
-
-        Returns:
-            None
     """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:

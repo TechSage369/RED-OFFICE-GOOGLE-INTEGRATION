@@ -9,6 +9,10 @@ The project is structured as follows:
 
   - **calendar**: Contains methods for managing calendar events, such as creating, listing, deleting, and getting events.
 
+  - **spreadsheet**: Contains methods for managing spreadsheet events, such as get-data, get-batch-data,update-values, updata-batch-values, append-data.
+
+  - **mail**: Contains methods for maniging emails , such as create-draft, delete-email, get-email, download-attachment, get list of mail using query.
+
   - **log**: Configuration file for logging settings.
 
   - **src**: Contains utility functions and project settings.

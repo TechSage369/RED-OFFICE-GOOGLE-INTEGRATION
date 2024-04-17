@@ -31,8 +31,6 @@ def create_draft(payload, attachment):
         Raises:
             click.BadParameter: If the payload is not a valid JSON string or file path.
 
-        Returns:
-            None
     """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
@@ -113,9 +111,6 @@ def download_attachment(payload, output):
         Args:
             payload (str): Path to a JSON file or a JSON string containing the email data.
             output (str): Path to the output directory.
-
-        Returns:
-            None
     """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:

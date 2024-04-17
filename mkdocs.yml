@@ -57,11 +57,19 @@ nav:
   - Setup Guide: setup_guide.md
   - Dev Docs:
       - Project Structure: project_structure.md
-      - Calendar:
-          - Events: calendar-events.md
-      - Google Service Handler:
-          - File Handler: google_service_file_handler.md
-          - Google Credentials Service: google_service_credential_service.md
-      - Source: source.md
-      - Log Handler: log.md
-      - Command Line Interface(CLI): CLI_handler.md
+      - Command Line Interface(CLI):
+          - Initialize Credentials: CLI_Initialize_credentials.md
+          - Calendar Events: CLI_calendar_events.md
+          - Gmail: CLI_gmail.md
+          - Spreadsheet: CLI_spreadsheet.md
+      - Modules:
+          - Calendar:
+              - Events: calendar-events.md
+          - Google Service Handler:
+              - File Handler: google_service_file_handler.md
+              - Google Credentials Service: google_service_credential_service.md
+          - Google Spreadsheet:
+              - Sheet: spreadsheet.md
+          - Source: source.md
+          - Log Handler: log.md
+          - Gmail: gmail.md
