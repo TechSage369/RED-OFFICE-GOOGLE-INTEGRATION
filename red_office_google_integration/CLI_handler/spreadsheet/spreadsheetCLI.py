@@ -2,10 +2,12 @@
 import click
 import os
 import json
-from red_office_google_integration.spreadsheets.sheets import SpreadSheet
 import pandas as pd
-
+from red_office_google_integration.spreadsheets.sheets import SpreadSheet
 from red_office_google_integration.src.utils import handle_exception
+"""
+# Spread Sheet
+"""
 
 
 @click.group(help="Spreadsheet where you can perform actions on Google Spreadsheet events.")
@@ -18,6 +20,8 @@ def spreadsheet():
 @click.argument('payload', type=str, required=True)
 @click.option('-o', '--output', type=click.Path(writable=True, resolve_path=True), help='Output directory')
 def get_data(payload, output):
+    """
+    """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
             payload_data = json.load(f)
@@ -44,10 +48,13 @@ def get_data(payload, output):
 # get batch_batch_data
 
 
-@click.command(help="Retrieves data from a multiple sspecified ranges in a Google Sheets spreadsheet.")
+@click.command(help="Retrieves data from a multiple specified ranges in a Google Sheets spreadsheet.")
 @click.argument('payload', type=str, required=True)
 @click.option('-o', '--output', type=click.Path(writable=True, resolve_path=True), help='Output directory')
 def get_batch_data(payload, output):
+    """
+    # Get_batch_data
+    """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
             payload_data = json.load(f)
@@ -73,8 +80,10 @@ def get_batch_data(payload, output):
 
 @click.command(help="update_values to specifed range in spreadsheet")
 @click.argument('payload', type=str, required=True)
-@click.option('-val', '--values', type=click.Path(writable=True, resolve_path=True), help='values in csv')
 def update_values(payload):
+    """
+    # Update Values
+    """
     if os.path.isfile(payload):
         with open(payload, 'r') as f:
             payload_data = json.load(f)
